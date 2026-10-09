@@ -1,32 +1,45 @@
-using System.Diagnostics;
-using _12_Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _12_Calculator.Controllers
+namespace Calculator.Controllers
 {
-    public class HomeController : Controller
+    public enum Operation
     {
-        private readonly ILogger<HomeController> _logger;
+        Add,
+        Subtract,
+        Multiply,
+        Divide
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+    public class CalculatorController : Controller
+    {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Calculate(double num1, double num2, Operation operation)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            double result = 0;
+            switch (operation)
+            {
+                case Operation.Add:
+                    result = num1 + num2;
+                    break;
+                case Operation.Subtract:
+                    result = num1 - num2;
+                    break;
+                case Operation.Multiply:
+                    result = num1 * num2;
+                    break;
+                case Operation.Divide:
+                    result = num1 / num2;
+                    break;
+            }
+            ViewBag.Result = result;
+            return View("Index");
         }
     }
 }

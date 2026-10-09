@@ -1,35 +1,21 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
+var builder = WebApplication.CreateBuilder(args);
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-COPY . /src
-WORKDIR /src
+builder.Services.AddControllersWithViews();
 
-RUN ls
-RUN dotnet restore
-RUN dotnet build "./12_Calculator.csproj" -c Release -o /app/build
+var app = builder.Build();
 
-FROM build AS publish
-RUN dotnet publish "./12_Calculator.csproj" -c Release -o /app/publish
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish ./
-ENTRYPOINT ["dotnet", "12_Calculator.dll"]FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-COPY . /src
-WORKDIR /src
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Calculator}/{action=Index}/{id?}");
 
-RUN ls
-RUN dotnet restore
-RUN dotnet build "./12_Calculator.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "./12_Calculator.csproj" -c Release -o /app/publish
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish ./
-ENTRYPOINT ["dotnet", "12_Calculator.dll"]
+app.Run();
