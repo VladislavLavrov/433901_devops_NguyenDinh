@@ -13,7 +13,7 @@ builder.Services.AddDbContext<CalculatorContext>(options =>
     options.UseMySql(mariadbCS, new MySqlServerVersion(new Version(10, 5, 15))));
 
 builder.Services.AddHttpClient();
-//builder.Services.AddHostedService<KafkaConsumerService>();
+builder.Services.AddHostedService<KafkaConsumerService>();
 builder.Services.AddSingleton<KafkaProducerHandler>();
 builder.Services.AddSingleton<KafkaProducerService<Null, string>>();
 
