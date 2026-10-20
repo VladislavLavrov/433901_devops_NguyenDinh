@@ -15,7 +15,7 @@ services:
   web:
     container_name: web-app-calculator-12
     hostname: app
-    build: .
+    build: 12_Calculator/
     ports:
       - "0.0.0.0:5012:5012"
     depends_on:
