@@ -45,7 +45,7 @@ namespace _12_Calculator.Controllers
             };
 
             var json = JsonSerializer.Serialize(dataInputVariant);
-            await _producer.ProduceAsync("kafka-topic-12", new Message<Null, string> { Value = json });
+            await _producer.ProduceAsync("nguyen", new Message<Null, string> { Value = json });
 
             return RedirectToAction(nameof(Index));
         }
