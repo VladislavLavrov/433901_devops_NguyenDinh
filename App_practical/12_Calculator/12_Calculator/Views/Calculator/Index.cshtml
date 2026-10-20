@@ -1,8 +1,11 @@
-﻿@{
-    ViewData["Title"] = "Простой калькулятор";
+﻿@model List<_12_Calculator.Models.DataInputVariant>
+
+@{
+    ViewData["Title"] = "Калькулятор";
 }
 
 <h2>@ViewData["Title"]</h2>
+<h4>Нгуен Динь Кхоа - НМТ 433901</h4> 
 
 <form method="post" asp-controller="Calculator" asp-action="Calculate">
     @Html.AntiForgeryToken()
@@ -14,15 +17,46 @@
         <option value="Divide">÷</option>
     </select>
     <input type="text" name="num2" required />
-    <input type="submit" value="результат" />
+    <input type="submit" value="Рассчитать" /> 
 </form>
 
-@if (ViewBag.Result != null)
-{
-    <h3>Result: @ViewBag.Result</h3>
-}
+<hr />
+
+<h3>История операций:</h3>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Operand 1</th>
+            <th>Operand 2</th>
+            <th>Operation</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID_DataInputVariant</td>
+                    <td>@item.Operand_1</td>
+                    <td>@item.Operand_2</td>
+                    <td>@item.Type_operation</td>
+                    <td>@item.Result</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" style="text-align: center;">Нет данных</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <footer style="margin-top: 30px; color: gray;">
     <hr />
-    <p>Нгуен Динх Кхоа - НМТ 433901</p>
+    <p>&copy; 2026 Нгуен Динь Кхоа - НМТ 433901</p> 
 </footer>
