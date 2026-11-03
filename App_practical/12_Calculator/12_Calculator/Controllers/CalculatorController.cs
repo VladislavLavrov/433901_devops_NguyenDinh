@@ -1,6 +1,7 @@
-using _12_Calculator.Data;
+﻿using _12_Calculator.Data;
 using _12_Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace _12_Calculator.Controllers
 {
@@ -24,7 +25,9 @@ namespace _12_Calculator.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            // LẤY DỮ LIỆU TỪ DB ĐỂ HIỂN THỊ LÊN BẢNG
+            var data = _context.DataInputVariants.OrderByDescending(x => x.ID_DataInputVariant).ToList();
+            return View(data);
         }
 
         [HttpPost]
@@ -59,8 +62,8 @@ namespace _12_Calculator.Controllers
             _context.DataInputVariants.Add(dataInputVariant);
             _context.SaveChanges();
 
-            ViewBag.Result = result;
-            return View("Index");
+            // Chuyển hướng về trang Index để load lại bảng
+            return RedirectToAction(nameof(Index));
         }
     }
 }
