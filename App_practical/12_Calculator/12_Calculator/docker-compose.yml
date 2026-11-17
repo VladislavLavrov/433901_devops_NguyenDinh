@@ -22,21 +22,4 @@ services:
       - "0.0.0.0:5012:5012"
     depends_on:
       - mariadb
-  prometheus:
-    container_name: prometheus-12
-    image: prom/prometheus:latest
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "0.0.0.0:9090:9090"
-    depends_on:
-      - web
-
-  grafana:
-    container_name: grafana-12
-    image: grafana/grafana:latest
-    ports:
-      - "0.0.0.0:3000:3000"
-    depends_on:
-      - prometheus
-   
+  
