@@ -3,6 +3,7 @@ using _12_Calculator.Services;
 using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,10 @@ builder.Services.AddOpenTelemetry()
     .WithMetrics(meterProviderBuilder =>
     {
         meterProviderBuilder.AddPrometheusExporter();
+        meterProviderBuilder.AddAspNetCoreInstrumentation(); 
         meterProviderBuilder.AddMeter("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Server.Kestrel");
 
+        
         meterProviderBuilder.AddView("http.server.request.duration",
             new ExplicitBucketHistogramConfiguration
             {
