@@ -1,0 +1,109 @@
+﻿@model HeatingOptimizationApp.Models.OptimizationResult
+@{
+    ViewData["Title"] = "Оптимизация обогрева";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary">Система расчета оптимального обогрева помещений</h2>
+
+    @if (Model.Status == "ОПТИМАЛЬНО")
+    {
+        <div class="alert alert-success text-center mt-3">
+            <h4>✅ Статус: НАЙДЕНО ОПТИМАЛЬНОЕ РЕШЕНИЕ</h4>
+            <h3>Максимальное количество теплоты (Z_max) = <strong>@Model.MaxHeat.ToString("F2")</strong> МДж</h3>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Матрица распределения топлива (X)</h4>
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Агрегат</th>
+                            <th>Топливо 1</th>
+                            <th>Топливо 2</th>
+                            <th>Топливо 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            <tr>
+                                <td><strong>Агрегат @(i + 1)</strong></td>
+                                @for (int j = 0; j < 3; j++)
+                                {
+                                    <td>@Model.X[i, j]</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <h4>Диаграмма распределения топлива</h4>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <form asp-action="ExportToExcel" method="post">
+                <button type="submit" class="btn btn-success btn-lg">📥 Экспорт отчета в Excel</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger text-center mt-3">
+            <h4>❌ Ошибка: @Model.Status</h4>
+        </div>
+    }
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    
+    var xData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.X!));
+
+    var labels = ['Агрегат 1', 'Агрегат 2', 'Агрегат 3', 'Агрегат 4'];
+    var dataValues = [];
+
+    if(xData) {
+        for(var i = 0; i < 4; i++) {
+            
+            dataValues.push(xData[i][0] + xData[i][1] + xData[i][2]);
+        }
+    }
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: { 
+            labels: labels,
+            datasets: [{
+                label: 'Общий расход топлива (т)',
+                data: dataValues,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
