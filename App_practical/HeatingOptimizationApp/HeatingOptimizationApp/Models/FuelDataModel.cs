@@ -2,7 +2,7 @@
 {
     public class FuelDataModel
     {
-      
+       
         public double[,] Q { get; set; } = new double[,] {
             { 45, 10, 29 },
             { 35, 33, 70 },
@@ -11,7 +11,7 @@
         };
        
         public double[] B { get; set; } = { 80, 90, 70, 60 };
-       
+        
         public double[] R { get; set; } = { 140, 160, 100 };
     }
 }
