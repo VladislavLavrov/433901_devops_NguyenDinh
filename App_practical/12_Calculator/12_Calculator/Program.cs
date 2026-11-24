@@ -17,13 +17,13 @@ builder.Services.AddSingleton<KafkaProducerHandler>();
 builder.Services.AddSingleton<KafkaProducerService<Null, string>>();
 
 
-builder.Services.AddOpenTelemetry()
-    .WithMetrics(meterProviderBuilder =>
-    {
-        meterProviderBuilder.AddPrometheusExporter();
+//builder.Services.AddOpenTelemetry()
+    //.WithMetrics(meterProviderBuilder =>
+    //{
+      //  meterProviderBuilder.AddPrometheusExporter();
       
-        meterProviderBuilder.AddMeter("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Server.Kestrel");
-    });
+       // meterProviderBuilder.AddMeter("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Server.Kestrel");
+   // });
 
 var app = builder.Build();
 
@@ -38,7 +38,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 
-app.MapPrometheusScrapingEndpoint();
+//app.MapPrometheusScrapingEndpoint();
 
 app.MapControllerRoute(
     name: "default",

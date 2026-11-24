@@ -25,7 +25,6 @@ namespace _12_Calculator.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // LẤY DỮ LIỆU TỪ DB ĐỂ HIỂN THỊ LÊN BẢNG
             var data = _context.DataInputVariants.OrderByDescending(x => x.ID_DataInputVariant).ToList();
             return View(data);
         }
@@ -62,7 +61,6 @@ namespace _12_Calculator.Controllers
             _context.DataInputVariants.Add(dataInputVariant);
             _context.SaveChanges();
 
-            // Chuyển hướng về trang Index để load lại bảng
             return RedirectToAction(nameof(Index));
         }
     }
